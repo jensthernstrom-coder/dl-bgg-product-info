@@ -1,0 +1,421 @@
+{%- comment -%}
+==========================================================
+START: DL BGG PRODUCT INFO - DATA
+==========================================================
+{%- endcomment -%}
+
+{%- liquid
+  assign dl_min_players = product.metafields.custom.min_players.value
+  assign dl_max_players = product.metafields.custom.max_players.value
+  assign dl_rating = product.metafields.custom.bgg_average_rating.value
+  assign dl_weight = product.metafields.custom.bgg_average_weight.value
+  assign dl_time_min = product.metafields.custom.play_time_min_minutes.value
+  assign dl_time_max = product.metafields.custom.play_time_max_minutes.value
+
+  assign dl_min_age = product.metafields.custom.min_age.value
+  assign dl_mechanics = product.metafields.custom.mechanics.value
+  assign dl_theme = product.metafields.custom.theme.value
+  assign dl_designers = product.metafields.custom.designers.value
+  assign dl_publishers = product.metafields.custom.publishers.value
+  assign dl_year = product.metafields.custom.year_published.value
+  assign dl_bgg_id = product.metafields.custom.bgg_id.value
+
+  assign dl_has_players = false
+  if dl_min_players != blank or dl_max_players != blank
+    assign dl_has_players = true
+  endif
+
+  assign dl_has_time = false
+  if dl_time_min != blank or dl_time_max != blank
+    assign dl_has_time = true
+  endif
+
+  assign dl_has_badges = false
+  if dl_has_players or dl_rating != blank or dl_weight != blank or dl_has_time
+    assign dl_has_badges = true
+  endif
+
+  assign dl_has_more = false
+  if dl_min_age != blank or dl_mechanics != blank or dl_theme != blank or dl_designers != blank or dl_publishers != blank or dl_year != blank or dl_bgg_id != blank
+    assign dl_has_more = true
+  endif
+
+  assign dl_has_any_data = false
+  if dl_has_badges or dl_has_more
+    assign dl_has_any_data = true
+  endif
+-%}
+
+{%- comment -%}
+==========================================================
+END: DL BGG PRODUCT INFO - DATA
+==========================================================
+{%- endcomment -%}
+
+
+{%- if dl_has_any_data -%}
+
+  {%- comment -%}
+  ==========================================================
+  START: DL BGG PRODUCT INFO - DISPLAY FORMATTING
+  ==========================================================
+  {%- endcomment -%}
+
+  {%- capture dl_players_text -%}
+    {%- if dl_min_players != blank and dl_max_players != blank -%}
+      {%- if dl_min_players == dl_max_players -%}
+        {{- dl_min_players -}}
+      {%- else -%}
+        {{- dl_min_players -}}–{{- dl_max_players -}}
+      {%- endif -%}
+    {%- elsif dl_min_players != blank -%}
+      {{- dl_min_players -}}+
+    {%- elsif dl_max_players != blank -%}
+      Upp till {{ dl_max_players }}
+    {%- endif -%}
+  {%- endcapture -%}
+
+  {%- capture dl_time_text -%}
+    {%- if dl_time_min != blank and dl_time_max != blank -%}
+      {%- if dl_time_min == dl_time_max -%}
+        {{- dl_time_min -}}
+      {%- else -%}
+        {{- dl_time_min -}}–{{- dl_time_max -}}
+      {%- endif -%}
+    {%- elsif dl_time_min != blank -%}
+      {{- dl_time_min -}}+
+    {%- elsif dl_time_max != blank -%}
+      Upp till {{ dl_time_max }}
+    {%- endif -%}
+  {%- endcapture -%}
+
+  {%- if dl_rating != blank -%}
+    {%- assign dl_rating_text = dl_rating | round: 1 | replace: '.', ',' -%}
+  {%- endif -%}
+
+  {%- if dl_weight != blank -%}
+    {%- assign dl_weight_text = dl_weight | round: 1 | replace: '.', ',' -%}
+  {%- endif -%}
+
+  {%- comment -%}
+  ==========================================================
+  END: DL BGG PRODUCT INFO - DISPLAY FORMATTING
+  ==========================================================
+  {%- endcomment -%}
+
+
+  {%- comment -%}
+  ==========================================================
+  START: DL BGG PRODUCT INFO - COMPONENT
+  ==========================================================
+  {%- endcomment -%}
+
+  <div
+    class="dl-bgg-info"
+    data-theme-colors="{{ block.settings.use_theme_colors }}"
+    style="
+      --dl-bgg-custom-bg: {{ block.settings.custom_background }};
+      --dl-bgg-custom-text: {{ block.settings.custom_text }};
+      --dl-bgg-custom-border: {{ block.settings.custom_border }};
+      --dl-bgg-custom-accent: {{ block.settings.custom_accent }};
+      --dl-bgg-badge-min-height: {{ block.settings.badge_min_height }}px;
+      --dl-bgg-badge-padding: {{ block.settings.badge_padding }}px;
+      --dl-bgg-gap: {{ block.settings.badge_gap }}px;
+      --dl-bgg-radius: {{ block.settings.corner_radius }}px;
+      --dl-bgg-icon-size: {{ block.settings.icon_size }}px;
+      --dl-bgg-value-size: {{ block.settings.value_size }}px;
+      --dl-bgg-label-size: {{ block.settings.label_size }}px;
+      --dl-bgg-space-block: {{ block.settings.vertical_spacing }}px;
+    "
+    {{ block.shopify_attributes }}
+  >
+    {%- if dl_has_badges -%}
+      <div class="dl-bgg-info__badges" aria-label="Spelfakta från BoardGameGeek">
+
+        {%- if dl_has_players -%}
+          <div class="dl-bgg-info__badge">
+            <svg class="dl-bgg-info__icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <div class="dl-bgg-info__badge-text">
+              <span class="dl-bgg-info__value">{{ dl_players_text | strip }}</span>
+              <span class="dl-bgg-info__label">spelare</span>
+            </div>
+          </div>
+        {%- endif -%}
+
+        {%- if dl_rating != blank -%}
+          <div class="dl-bgg-info__badge">
+            <svg class="dl-bgg-info__icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="m12 3 2.78 5.63 6.22.9-4.5 4.39 1.06 6.2L12 17.2l-5.56 2.92 1.06-6.2L3 9.53l6.22-.9L12 3Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+            </svg>
+            <div class="dl-bgg-info__badge-text">
+              <span class="dl-bgg-info__value">{{ dl_rating_text }} BGG</span>
+              <span class="dl-bgg-info__label">betyg</span>
+            </div>
+          </div>
+        {%- endif -%}
+
+        {%- if dl_weight != blank -%}
+          <div class="dl-bgg-info__badge">
+            <svg class="dl-bgg-info__icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.7"/>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06-2.83 2.83-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21h-4v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06-2.83-2.83.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3v-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06L7.04 4.3l.06.06A1.65 1.65 0 0 0 8.92 4a1.65 1.65 0 0 0 1-1.51V2h4v.49a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06 2.83 2.83-.06.06A1.65 1.65 0 0 0 19.4 9c.12.61.65 1.05 1.27 1.05H21v4h-.33c-.62 0-1.15.44-1.27 1.05Z" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <div class="dl-bgg-info__badge-text">
+              <span class="dl-bgg-info__value">{{ dl_weight_text }} / 5</span>
+              <span class="dl-bgg-info__label">komplexitet</span>
+            </div>
+          </div>
+        {%- endif -%}
+
+        {%- if dl_has_time -%}
+          <div class="dl-bgg-info__badge">
+            <svg class="dl-bgg-info__icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.7"/>
+              <path d="M12 7v5l3 2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <div class="dl-bgg-info__badge-text">
+              <span class="dl-bgg-info__value">{{ dl_time_text | strip }} min</span>
+              <span class="dl-bgg-info__label">speltid</span>
+            </div>
+          </div>
+        {%- endif -%}
+
+      </div>
+
+      {%- if block.settings.show_source -%}
+        <p class="dl-bgg-info__source">Speldata från BoardGameGeek</p>
+      {%- endif -%}
+    {%- endif -%}
+
+    {%- if dl_has_more -%}
+      <details class="dl-bgg-info__details">
+        <summary class="dl-bgg-info__summary">
+          <span class="dl-bgg-info__summary-text">{{ block.settings.accordion_label | escape }}</span>
+          <svg class="dl-bgg-info__chevron" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+        </summary>
+
+        <div class="dl-bgg-info__expanded">
+          <dl class="dl-bgg-info__rows">
+
+            {%- if dl_min_age != blank -%}
+              <div class="dl-bgg-info__row">
+                <dt class="dl-bgg-info__term">Rekommenderad ålder</dt>
+                <dd class="dl-bgg-info__description">{{ dl_min_age }}+</dd>
+              </div>
+            {%- endif -%}
+
+            {%- if dl_mechanics != blank -%}
+              <div class="dl-bgg-info__row">
+                <dt class="dl-bgg-info__term">Mekaniker</dt>
+                <dd class="dl-bgg-info__description">{{ dl_mechanics | escape }}</dd>
+              </div>
+            {%- endif -%}
+
+            {%- if dl_theme != blank -%}
+              <div class="dl-bgg-info__row">
+                <dt class="dl-bgg-info__term">Tema</dt>
+                <dd class="dl-bgg-info__description">{{ dl_theme | escape }}</dd>
+              </div>
+            {%- endif -%}
+
+            {%- if dl_designers != blank -%}
+              <div class="dl-bgg-info__row">
+                <dt class="dl-bgg-info__term">Designer</dt>
+                <dd class="dl-bgg-info__description">{{ dl_designers | escape }}</dd>
+              </div>
+            {%- endif -%}
+
+            {%- if dl_publishers != blank -%}
+              <div class="dl-bgg-info__row">
+                <dt class="dl-bgg-info__term">Utgivare</dt>
+                <dd class="dl-bgg-info__description">{{ dl_publishers | escape }}</dd>
+              </div>
+            {%- endif -%}
+
+            {%- if dl_year != blank -%}
+              <div class="dl-bgg-info__row">
+                <dt class="dl-bgg-info__term">Utgivningsår</dt>
+                <dd class="dl-bgg-info__description">{{ dl_year }}</dd>
+              </div>
+            {%- endif -%}
+
+          </dl>
+
+          {%- if dl_bgg_id != blank -%}
+            <a
+              class="dl-bgg-info__bgg-link"
+              href="https://boardgamegeek.com/boardgame/{{ dl_bgg_id }}"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <span>Se spelet på BoardGameGeek</span>
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M14 5h5v5M10 14 19 5M19 13v6H5V5h6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+          {%- endif -%}
+        </div>
+      </details>
+    {%- endif -%}
+  </div>
+
+  {%- comment -%}
+  ==========================================================
+  END: DL BGG PRODUCT INFO - COMPONENT
+  ==========================================================
+  {%- endcomment -%}
+
+{%- endif -%}
+
+
+{% schema %}
+{
+  "name": "DL – BGG spelinfo",
+  "target": "section",
+  "enabled_on": {
+    "templates": ["product"]
+  },
+  "stylesheet": "dl-bgg-product-info.css",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Färger"
+    },
+    {
+      "type": "checkbox",
+      "id": "use_theme_colors",
+      "label": "Använd temats färger",
+      "default": true,
+      "info": "Ärver färgvariabler från sektionen där blocket ligger. Stäng av för egna färger."
+    },
+    {
+      "type": "color",
+      "id": "custom_background",
+      "label": "Egen badge-bakgrund",
+      "default": "#F8F6F1"
+    },
+    {
+      "type": "color",
+      "id": "custom_text",
+      "label": "Egen textfärg",
+      "default": "#24292F"
+    },
+    {
+      "type": "color",
+      "id": "custom_border",
+      "label": "Egen kantfärg",
+      "default": "#D8D4CB"
+    },
+    {
+      "type": "color",
+      "id": "custom_accent",
+      "label": "Egen ikonfärg",
+      "default": "#315C68"
+    },
+    {
+      "type": "header",
+      "content": "Badges"
+    },
+    {
+      "type": "range",
+      "id": "badge_min_height",
+      "label": "Minsta badgehöjd",
+      "min": 64,
+      "max": 110,
+      "step": 2,
+      "unit": "px",
+      "default": 76
+    },
+    {
+      "type": "range",
+      "id": "badge_padding",
+      "label": "Padding i badges",
+      "min": 8,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "badge_gap",
+      "label": "Avstånd mellan badges",
+      "min": 4,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "corner_radius",
+      "label": "Hörnradie",
+      "min": 0,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "icon_size",
+      "label": "Ikonstorlek",
+      "min": 16,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 22
+    },
+    {
+      "type": "range",
+      "id": "value_size",
+      "label": "Storlek på huvudvärde",
+      "min": 13,
+      "max": 22,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "label_size",
+      "label": "Storlek på etikett",
+      "min": 10,
+      "max": 16,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "vertical_spacing",
+      "label": "Vertikalt mellanrum runt blocket",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "BoardGameGeek"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_source",
+      "label": "Visa källrad",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "accordion_label",
+      "label": "Text på mer-info-raden",
+      "default": "Mer info från BoardGameGeek"
+    }
+  ]
+}
+{% endschema %}

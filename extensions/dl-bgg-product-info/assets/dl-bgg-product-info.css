@@ -1,0 +1,228 @@
+/* ==========================================================
+   START: DL BGG PRODUCT INFO - BASE
+   ========================================================== */
+
+.dl-bgg-info {
+  --dl-bgg-bg: var(--color-background, var(--background, #f8f6f1));
+  --dl-bgg-text: rgb(var(--color-foreground, 36 41 47));
+  --dl-bgg-border: rgba(var(--color-foreground, 36 41 47), 0.14);
+  --dl-bgg-accent: rgb(var(--color-foreground, 36 41 47));
+
+  width: 100%;
+  margin-block: var(--dl-bgg-space-block, 16px);
+  color: var(--dl-bgg-text);
+}
+
+.dl-bgg-info[data-theme-colors="false"] {
+  --dl-bgg-bg: var(--dl-bgg-custom-bg);
+  --dl-bgg-text: var(--dl-bgg-custom-text);
+  --dl-bgg-border: var(--dl-bgg-custom-border);
+  --dl-bgg-accent: var(--dl-bgg-custom-accent);
+}
+
+.dl-bgg-info,
+.dl-bgg-info * {
+  box-sizing: border-box;
+}
+
+/* ==========================================================
+   END: DL BGG PRODUCT INFO - BASE
+   ========================================================== */
+
+
+/* ==========================================================
+   START: DL BGG PRODUCT INFO - BADGES
+   ========================================================== */
+
+.dl-bgg-info__badges {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--dl-bgg-gap, 10px);
+}
+
+.dl-bgg-info__badge {
+  min-width: 0;
+  min-height: var(--dl-bgg-badge-min-height, 76px);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: var(--dl-bgg-badge-padding, 12px);
+  border: 1px solid var(--dl-bgg-border);
+  border-radius: var(--dl-bgg-radius, 12px);
+  background: var(--dl-bgg-bg);
+}
+
+.dl-bgg-info__icon {
+  width: var(--dl-bgg-icon-size, 22px);
+  height: var(--dl-bgg-icon-size, 22px);
+  flex: 0 0 auto;
+  color: var(--dl-bgg-accent);
+}
+
+.dl-bgg-info__badge-text {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.dl-bgg-info__value {
+  font-size: var(--dl-bgg-value-size, 16px);
+  line-height: 1.2;
+  font-weight: 650;
+  overflow-wrap: anywhere;
+}
+
+.dl-bgg-info__label {
+  font-size: var(--dl-bgg-label-size, 12px);
+  line-height: 1.25;
+  opacity: 0.72;
+}
+
+/* ==========================================================
+   END: DL BGG PRODUCT INFO - BADGES
+   ========================================================== */
+
+
+/* ==========================================================
+   START: DL BGG PRODUCT INFO - SOURCE
+   ========================================================== */
+
+.dl-bgg-info__source {
+  margin: 8px 2px 0;
+  font-size: 12px;
+  line-height: 1.35;
+  opacity: 0.68;
+}
+
+/* ==========================================================
+   END: DL BGG PRODUCT INFO - SOURCE
+   ========================================================== */
+
+
+/* ==========================================================
+   START: DL BGG PRODUCT INFO - ACCORDION
+   ========================================================== */
+
+.dl-bgg-info__details {
+  margin-top: 12px;
+  border-top: 1px solid var(--dl-bgg-border);
+  border-bottom: 1px solid var(--dl-bgg-border);
+}
+
+.dl-bgg-info__summary {
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 2px;
+  cursor: pointer;
+  list-style: none;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.dl-bgg-info__summary::-webkit-details-marker {
+  display: none;
+}
+
+.dl-bgg-info__summary-text {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.dl-bgg-info__chevron {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 auto;
+  transition: transform 160ms ease;
+}
+
+.dl-bgg-info__details[open] .dl-bgg-info__chevron {
+  transform: rotate(45deg);
+}
+
+.dl-bgg-info__expanded {
+  padding: 2px 2px 16px;
+}
+
+.dl-bgg-info__rows {
+  margin: 0;
+  display: grid;
+  gap: 12px;
+}
+
+.dl-bgg-info__row {
+  display: grid;
+  grid-template-columns: minmax(120px, 0.32fr) minmax(0, 1fr);
+  gap: 14px;
+}
+
+.dl-bgg-info__term,
+.dl-bgg-info__description {
+  margin: 0;
+}
+
+.dl-bgg-info__term {
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.dl-bgg-info__description {
+  font-size: 13px;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.dl-bgg-info__bgg-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 16px;
+  color: inherit;
+  font-size: 13px;
+  font-weight: 650;
+  text-underline-offset: 0.18em;
+}
+
+.dl-bgg-info__bgg-link svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* ==========================================================
+   END: DL BGG PRODUCT INFO - ACCORDION
+   ========================================================== */
+
+
+/* ==========================================================
+   START: DL BGG PRODUCT INFO - RESPONSIVE
+   ========================================================== */
+
+@media screen and (max-width: 749px) {
+  .dl-bgg-info__badges {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .dl-bgg-info__row {
+    grid-template-columns: 1fr;
+    gap: 3px;
+  }
+}
+
+@media screen and (max-width: 360px) {
+  .dl-bgg-info__badge {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dl-bgg-info__chevron {
+    transition: none;
+  }
+}
+
+/* ==========================================================
+   END: DL BGG PRODUCT INFO - RESPONSIVE
+   ========================================================== */

@@ -1,0 +1,15 @@
+{
+  "name": "dl-bgg-product-info",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Dragon's Lair - compact BoardGameGeek product information theme app extension",
+  "scripts": {
+    "shopify": "shopify",
+    "dev": "shopify app dev",
+    "deploy": "shopify app deploy",
+    "validate": "shopify app config validate"
+  },
+  "devDependencies": {
+    "@shopify/cli": "latest"
+  }
+}
