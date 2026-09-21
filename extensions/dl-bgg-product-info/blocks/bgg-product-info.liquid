@@ -150,8 +150,8 @@ END: DL BGG PRODUCT INFO - DATA
               <path d="m12 3 2.78 5.63 6.22.9-4.5 4.39 1.06 6.2L12 17.2l-5.56 2.92 1.06-6.2L3 9.53l6.22-.9L12 3Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
             </svg>
             <div class="dl-bgg-info__badge-text">
-              <span class="dl-bgg-info__value">{{ dl_rating_text }} BGG</span>
-              <span class="dl-bgg-info__label">betyg</span>
+              <span class="dl-bgg-info__value">{{ dl_rating_text }} / 10</span>
+              <span class="dl-bgg-info__label">BoardGameGeek.com</span>
             </div>
           </div>
         {%- endif -%}
@@ -211,7 +211,7 @@ END: DL BGG PRODUCT INFO - DATA
             {%- if dl_mechanics != blank -%}
               <div class="dl-bgg-info__row">
                 <dt class="dl-bgg-info__term">Mekaniker</dt>
-                <dd class="dl-bgg-info__description">{{ dl_mechanics | escape }}</dd>
+                <dd class="dl-bgg-info__description">{{ dl_mechanics | join: ' · ' | escape }}</dd>
               </div>
             {%- endif -%}
 
@@ -225,14 +225,14 @@ END: DL BGG PRODUCT INFO - DATA
             {%- if dl_designers != blank -%}
               <div class="dl-bgg-info__row">
                 <dt class="dl-bgg-info__term">Designer</dt>
-                <dd class="dl-bgg-info__description">{{ dl_designers | escape }}</dd>
+                <dd class="dl-bgg-info__description">{{ dl_designers | join: ' · ' | escape }}</dd>
               </div>
             {%- endif -%}
 
             {%- if dl_publishers != blank -%}
               <div class="dl-bgg-info__row">
                 <dt class="dl-bgg-info__term">Utgivare</dt>
-                <dd class="dl-bgg-info__description">{{ dl_publishers | escape }}</dd>
+                <dd class="dl-bgg-info__description">{{ dl_publishers | join: ' · ' | escape }}</dd>
               </div>
             {%- endif -%}
 
