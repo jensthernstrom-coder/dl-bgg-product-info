@@ -12,6 +12,28 @@ START: DL BGG PRODUCT INFO - DATA
   assign dl_time_min = product.metafields.custom.play_time_min_minutes.value
   assign dl_time_max = product.metafields.custom.play_time_max_minutes.value
 
+  comment
+    BGG sometimes returns 0 for an unknown playing time.
+    Never display 0 or an inverted time range to customers.
+  endcomment
+  if dl_time_min != blank
+    assign dl_time_min = dl_time_min | plus: 0
+    if dl_time_min <= 0
+      assign dl_time_min = nil
+    endif
+  endif
+  if dl_time_max != blank
+    assign dl_time_max = dl_time_max | plus: 0
+    if dl_time_max <= 0
+      assign dl_time_max = nil
+    endif
+  endif
+  if dl_time_min != blank and dl_time_max != blank
+    if dl_time_max < dl_time_min
+      assign dl_time_max = nil
+    endif
+  endif
+
   assign dl_min_age = product.metafields.custom.min_age.value
   assign dl_mechanics = product.metafields.custom.mechanics.value
   assign dl_theme = product.metafields.custom.theme.value
@@ -83,7 +105,7 @@ END: DL BGG PRODUCT INFO - DATA
         {{- dl_time_min -}}–{{- dl_time_max -}}
       {%- endif -%}
     {%- elsif dl_time_min != blank -%}
-      {{- dl_time_min -}}+
+      {{- dl_time_min -}}
     {%- elsif dl_time_max != blank -%}
       Upp till {{ dl_time_max }}
     {%- endif -%}
