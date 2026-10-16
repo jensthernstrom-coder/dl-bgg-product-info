@@ -12,10 +12,7 @@ START: DL BGG PRODUCT INFO - DATA
   assign dl_time_min = product.metafields.custom.play_time_min_minutes.value
   assign dl_time_max = product.metafields.custom.play_time_max_minutes.value
 
-  comment
-    BGG sometimes returns 0 for an unknown playing time.
-    Never display 0 or an inverted time range to customers.
-  endcomment
+  # BGG can use 0 for missing playing time; never show zero or inverted ranges.
   if dl_time_min != blank
     assign dl_time_min = dl_time_min | plus: 0
     if dl_time_min <= 0
