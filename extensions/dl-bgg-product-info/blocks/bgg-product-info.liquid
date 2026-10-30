@@ -17,6 +17,25 @@ START: DL BGG PRODUCT INFO - DATA
   assign dl_rpg_genre = product.metafields.custom.rpg_genre.value
   assign dl_rpg_product_type = product.metafields.custom.rpg_product_type.value
   assign dl_rpg_mechanics = product.metafields.custom.rpg_mechanics.value
+  # Use original RPGGeek labels in product display; Search & Discovery keeps
+  # the existing normalized fields until a separate controlled filter migration.
+  assign dl_rpg_source_genre = product.metafields.custom.rpg_source_genre.value
+  assign dl_rpg_source_mechanics = product.metafields.custom.rpg_source_mechanics.value
+  assign dl_rpg_display_genre = dl_rpg_genre
+  assign dl_rpg_display_mechanics = dl_rpg_mechanics
+  if dl_rpg_source_genre != blank
+    assign dl_rpg_display_genre = dl_rpg_source_genre
+  endif
+  if dl_rpg_source_mechanics != blank
+    assign dl_rpg_display_mechanics = dl_rpg_source_mechanics
+  endif
+
+  # Language is an explicitly set Shopify product attribute, never inferred
+  # from English titles or from RPGGeek mechanics.
+  assign dl_rpg_language = product.metafields.custom.rpg_language.value
+  if dl_rpg_language == blank
+    assign dl_rpg_language = product.metafields.custom.sprak.value
+  endif
   assign dl_rpg_setting = product.metafields.custom.rpg_setting.value
   assign dl_rpg_series = product.metafields.custom.rpg_series.value
   assign dl_rpg_designers = product.metafields.custom.rpg_designers.value
@@ -121,9 +140,14 @@ START: DL BGG PRODUCT INFO - DATA
     # rather than repeat the same name in the first fact card.
     assign dl_rpg_game_compare = dl_rpg_game_display | downcase | strip
     assign dl_product_compare = product.title | downcase | strip
-    if dl_rpg_game_compare == dl_product_compare and dl_rpg_genre != blank
+    if dl_rpg_game_compare == dl_product_compare and dl_rpg_display_genre != blank
       assign dl_rpg_use_genre_card = true
-      assign dl_rpg_game_display = dl_rpg_genre | first
+      assign dl_rpg_game_display = dl_rpg_display_genre | first
+      if dl_rpg_game_display == 'Fantasy (High Fantasy)'
+        assign dl_rpg_game_display = 'High Fantasy'
+      elsif dl_rpg_game_display == 'Fantasy (Low Fantasy)'
+        assign dl_rpg_game_display = 'Low Fantasy'
+      endif
     endif
   endif
 -%}
@@ -194,7 +218,7 @@ END: DL BGG PRODUCT INFO - DATA
 
   <div
     class="dl-bgg-info"
-    data-dl-block-version="rpggeek-v4-system-20261030"
+    data-dl-block-version="rpggeek-v5-original-language-20261030"
     data-dl-display-mode="{% if dl_is_rpg %}rpg{% else %}boardgame{% endif %}"
     data-dl-source-type="{{ dl_geek_source | default: 'saknas' | escape }}"
     data-theme-colors="{{ block.settings.use_theme_colors }}"
@@ -250,6 +274,10 @@ END: DL BGG PRODUCT INFO - DATA
         {%- endif -%}
       </div>
 
+      {%- if dl_rpg_language != blank -%}
+        <p class="dl-bgg-info__language"><strong>Språk:</strong> {{ dl_rpg_language | escape }}</p>
+      {%- endif -%}
+
       {%- if block.settings.show_source -%}
         <p class="dl-bgg-info__source">{% if dl_geek_source == 'rpg' %}Systeminformation från RPGGeek. Gäller rollspelet, inte en specifik produktutgåva.{% else %}Speldata från RPGGeek{% endif %}</p>
       {%- endif -%}
@@ -270,11 +298,35 @@ END: DL BGG PRODUCT INFO - DATA
               {%- if dl_rpg_system_shortened -%}
                 <div class="dl-bgg-info__row"><dt class="dl-bgg-info__term">Regelsystem, fullständigt namn</dt><dd class="dl-bgg-info__description">{{ dl_rpg_system | join: ' · ' | escape }}</dd></div>
               {%- endif -%}
-              {%- if dl_rpg_genre != blank -%}
-                <div class="dl-bgg-info__row"><dt class="dl-bgg-info__term">Genre</dt><dd class="dl-bgg-info__description">{{ dl_rpg_genre | join: ' · ' | escape }}</dd></div>
+              {%- if dl_rpg_display_genre != blank -%}
+                <div class="dl-bgg-info__row">
+                  <dt class="dl-bgg-info__term">Genre</dt>
+                  <dd class="dl-bgg-info__description">
+                    {%- for genre in dl_rpg_display_genre -%}
+                      {%- case genre -%}
+                        {%- when 'Fantasy (High Fantasy)' -%}High Fantasy
+                        {%- when 'Fantasy (Low Fantasy)' -%}Low Fantasy
+                        {%- else -%}{{ genre | escape }}
+                      {%- endcase -%}
+                      {%- unless forloop.last %} · {% endunless -%}
+                    {%- endfor -%}
+                  </dd>
+                </div>
               {%- endif -%}
-              {%- if dl_rpg_mechanics != blank -%}
-                <div class="dl-bgg-info__row"><dt class="dl-bgg-info__term">Mekaniker</dt><dd class="dl-bgg-info__description">{{ dl_rpg_mechanics | join: ' · ' | escape }}</dd></div>
+              {%- if dl_rpg_display_mechanics != blank -%}
+                <div class="dl-bgg-info__row">
+                  <dt class="dl-bgg-info__term">Mekaniker</dt>
+                  <dd class="dl-bgg-info__description">
+                    {%- for mechanic in dl_rpg_display_mechanics -%}
+                      {%- assign mechanic_display = mechanic -%}
+                      {%- unless mechanic contains 'Dice (' -%}
+                        {%- assign mechanic_display = mechanic | split: ' (' | first | strip -%}
+                      {%- endunless -%}
+                      {{- mechanic_display | escape -}}
+                      {%- unless forloop.last %} · {% endunless -%}
+                    {%- endfor -%}
+                  </dd>
+                </div>
               {%- endif -%}
               {%- if dl_rpg_setting != blank -%}
                 <div class="dl-bgg-info__row"><dt class="dl-bgg-info__term">Spelvärld</dt><dd class="dl-bgg-info__description">{{ dl_rpg_setting | join: ' · ' | escape }}</dd></div>
