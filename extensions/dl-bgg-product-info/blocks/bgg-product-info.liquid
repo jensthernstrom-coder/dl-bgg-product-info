@@ -22,6 +22,14 @@ START: DL BGG PRODUCT INFO - DATA
   assign dl_rpg_designers = product.metafields.custom.rpg_designers.value
   assign dl_rpg_publishers = product.metafields.custom.rpg_publishers.value
 
+  # Fallback only when the source-type metafield is missing. Never override
+  # an explicitly boardgame-typed product merely because stale RPG data exists.
+  if dl_geek_source == blank
+    if dl_rpg_game != blank or dl_rpg_system != blank or dl_rpg_product_type != blank or dl_rpg_mechanics != blank
+      assign dl_is_rpg = true
+    endif
+  endif
+
   assign dl_min_players = product.metafields.custom.min_players.value
   assign dl_max_players = product.metafields.custom.max_players.value
   assign dl_rating = product.metafields.custom.bgg_average_rating.value
@@ -155,6 +163,9 @@ END: DL BGG PRODUCT INFO - DATA
 
   <div
     class="dl-bgg-info"
+    data-dl-block-version="rpggeek-v2-20261030"
+    data-dl-display-mode="{% if dl_is_rpg %}rpg{% else %}boardgame{% endif %}"
+    data-dl-source-type="{{ dl_geek_source | default: 'saknas' | escape }}"
     data-theme-colors="{{ block.settings.use_theme_colors }}"
     style="
       --dl-bgg-custom-bg: {{ block.settings.custom_background }};
