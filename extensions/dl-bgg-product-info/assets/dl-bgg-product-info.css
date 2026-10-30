@@ -79,6 +79,12 @@
   opacity: 0.72;
 }
 
+/* RPG card count varies by product. Two cards should fill the available
+   width, while four still fit as a row on normal desktop product pages. */
+.dl-bgg-info[data-dl-display-mode="rpg"] .dl-bgg-info__badges {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 135px), 1fr));
+}
+
 /* ==========================================================
    END: DL BGG PRODUCT INFO - BADGES
    ========================================================== */
@@ -190,6 +196,30 @@
   height: 14px;
 }
 
+/* A little more breathing room for long RPGGeek mechanics and credits,
+   without changing the established BoardGameGeek board-game layout. */
+.dl-bgg-info[data-dl-display-mode="rpg"] .dl-bgg-info__expanded {
+  padding: 8px 2px 18px;
+}
+
+.dl-bgg-info[data-dl-display-mode="rpg"] .dl-bgg-info__rows {
+  gap: 16px;
+}
+
+.dl-bgg-info[data-dl-display-mode="rpg"] .dl-bgg-info__row {
+  grid-template-columns: minmax(130px, 0.34fr) minmax(0, 1fr);
+  gap: 18px;
+  align-items: start;
+}
+
+.dl-bgg-info[data-dl-display-mode="rpg"] .dl-bgg-info__term {
+  line-height: 1.5;
+}
+
+.dl-bgg-info[data-dl-display-mode="rpg"] .dl-bgg-info__description {
+  line-height: 1.6;
+}
+
 /* ==========================================================
    END: DL BGG PRODUCT INFO - ACCORDION
    ========================================================== */
@@ -207,6 +237,11 @@
   .dl-bgg-info__row {
     grid-template-columns: 1fr;
     gap: 3px;
+  }
+
+  .dl-bgg-info[data-dl-display-mode="rpg"] .dl-bgg-info__row {
+    grid-template-columns: 1fr;
+    gap: 4px;
   }
 }
 
