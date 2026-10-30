@@ -95,6 +95,33 @@ START: DL BGG PRODUCT INFO - DATA
       assign dl_has_any_data = true
     endif
   endif
+
+  # Readable badge labels only; do not alter the full RPGGeek metafield values.
+  assign dl_rpg_game_display = dl_rpg_game | join: ' · '
+  assign dl_rpg_system_display = dl_rpg_system | join: ' · '
+  assign dl_rpg_game_shortened = false
+  assign dl_rpg_system_shortened = false
+  assign dl_rpg_use_genre_card = false
+
+  if dl_is_rpg
+    if dl_rpg_game.size == 1 and dl_rpg_game_display == 'Dungeons & Dragons (5th Edition)'
+      assign dl_rpg_game_display = 'D&D 5e'
+      assign dl_rpg_game_shortened = true
+    endif
+    if dl_rpg_system.size == 1 and dl_rpg_system_display == 'D&D 5E Game System'
+      assign dl_rpg_system_display = 'D&D 5E'
+      assign dl_rpg_system_shortened = true
+    endif
+
+    # If the game's name is identical to the product title, prefer its genre
+    # rather than repeat the same name in the first fact card.
+    assign dl_rpg_game_compare = dl_rpg_game_display | downcase | strip
+    assign dl_product_compare = product.title | downcase | strip
+    if dl_rpg_game_compare == dl_product_compare and dl_rpg_genre != blank
+      assign dl_rpg_use_genre_card = true
+      assign dl_rpg_game_display = dl_rpg_genre | first
+    endif
+  endif
 -%}
 
 {%- comment -%}
@@ -163,7 +190,7 @@ END: DL BGG PRODUCT INFO - DATA
 
   <div
     class="dl-bgg-info"
-    data-dl-block-version="rpggeek-v2-20261030"
+    data-dl-block-version="rpggeek-v3-20261030"
     data-dl-display-mode="{% if dl_is_rpg %}rpg{% else %}boardgame{% endif %}"
     data-dl-source-type="{{ dl_geek_source | default: 'saknas' | escape }}"
     data-theme-colors="{{ block.settings.use_theme_colors }}"
@@ -188,15 +215,15 @@ END: DL BGG PRODUCT INFO - DATA
         {%- if dl_rpg_game != blank -%}
           <div class="dl-bgg-info__badge">
             <div class="dl-bgg-info__badge-text">
-              <span class="dl-bgg-info__value">{{ dl_rpg_game | first | escape }}</span>
-              <span class="dl-bgg-info__label">Rollspel</span>
+              <span class="dl-bgg-info__value">{{ dl_rpg_game_display | escape }}</span>
+              <span class="dl-bgg-info__label">{% if dl_rpg_use_genre_card %}Genre{% else %}Rollspel{% endif %}</span>
             </div>
           </div>
         {%- endif -%}
         {%- if dl_rpg_system != blank -%}
           <div class="dl-bgg-info__badge">
             <div class="dl-bgg-info__badge-text">
-              <span class="dl-bgg-info__value">{{ dl_rpg_system | join: ' · ' | escape }}</span>
+              <span class="dl-bgg-info__value">{{ dl_rpg_system_display | escape }}</span>
               <span class="dl-bgg-info__label">Regelsystem</span>
             </div>
           </div>
@@ -233,6 +260,12 @@ END: DL BGG PRODUCT INFO - DATA
           </summary>
           <div class="dl-bgg-info__expanded">
             <dl class="dl-bgg-info__rows">
+              {%- if dl_rpg_game_shortened -%}
+                <div class="dl-bgg-info__row"><dt class="dl-bgg-info__term">Rollspel, fullständigt namn</dt><dd class="dl-bgg-info__description">{{ dl_rpg_game | join: ' · ' | escape }}</dd></div>
+              {%- endif -%}
+              {%- if dl_rpg_system_shortened -%}
+                <div class="dl-bgg-info__row"><dt class="dl-bgg-info__term">Regelsystem, fullständigt namn</dt><dd class="dl-bgg-info__description">{{ dl_rpg_system | join: ' · ' | escape }}</dd></div>
+              {%- endif -%}
               {%- if dl_rpg_genre != blank -%}
                 <div class="dl-bgg-info__row"><dt class="dl-bgg-info__term">Genre</dt><dd class="dl-bgg-info__description">{{ dl_rpg_genre | join: ' · ' | escape }}</dd></div>
               {%- endif -%}
