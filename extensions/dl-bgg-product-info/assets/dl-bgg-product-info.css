@@ -101,6 +101,18 @@
   opacity: 0.68;
 }
 
+/* The edition language comes only from a staff-maintained Shopify field.
+   It must be easy to distinguish from the RPGGeek rules vocabulary. */
+.dl-bgg-info__language {
+  margin: 10px 2px 0;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.dl-bgg-info__language strong {
+  font-weight: 650;
+}
+
 /* ==========================================================
    END: DL BGG PRODUCT INFO - SOURCE
    ========================================================== */
