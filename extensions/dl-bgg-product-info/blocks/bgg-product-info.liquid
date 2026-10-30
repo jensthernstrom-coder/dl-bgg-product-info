@@ -284,7 +284,7 @@ END: DL BGG PRODUCT INFO - DATA
               {%- if dl_rpg_publishers != blank -%}
                 <div class="dl-bgg-info__row"><dt class="dl-bgg-info__term">Utgivare enligt RPGGeek</dt><dd class="dl-bgg-info__description">{{ dl_rpg_publishers | join: ' · ' | escape }}</dd></div>
               {%- endif -%}
-              {%- if dl_year != blank -%}
+              {%- if dl_geek_source != 'rpg' and dl_year != blank -%}
                 <div class="dl-bgg-info__row"><dt class="dl-bgg-info__term">Utgivningsår</dt><dd class="dl-bgg-info__description">{{ dl_year | escape }}</dd></div>
               {%- endif -%}
             </dl>
