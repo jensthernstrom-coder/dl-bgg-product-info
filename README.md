@@ -31,6 +31,18 @@ Denna gren är **inte deployad**. Shopify-kopian `RPGGeek – Klon av livetema 3
 - RPG-detaljerna har luftigare rader och bättre radavstånd, samt mobilanpassad enkolumnslayout.
 - Ingen automatisk ändring av lagrad RPGGeek-data eller BGG-fält sker i den här temauppdateringen.
 
+## RPGGeek: originaltermer och språkversion (2026-10-30)
+
+Rollspelsinformationen har **svenska rubriker** men visar RPGGeeks etablerade engelska originaltermer för genre och mekaniker. Det gör t.ex. `Comedy / Satire`, `Horror`, `Free-form` och `Skill Based` igenkännbara för rollspelare utan att de på något sätt antyder att själva boken är på engelska. Enkla förklarande parenteser kortas i den synliga mekaniklistan, men viktiga tärningsvarianter (`Dice (Primarily d6)`, `Dice (Percentile)` etc.) behålls. `Fantasy (High Fantasy)` och `Fantasy (Low Fantasy)` visas som `High Fantasy` respektive `Low Fantasy` på produktsidan.
+
+- **Visning:** `custom.rpg_source_mechanics` och `custom.rpg_source_genre` läses om de finns, annars används `custom.rpg_mechanics` och `custom.rpg_genre` (för äldre produkter).
+- **Shopify-filter:** `custom.rpg_mechanics` och `custom.rpg_genre` lämnas helt orörda av denna uppdatering. Det krävs alltså ingen omedelbar omsynk och dagens Search & Discovery-filter slutar inte fungera. En senare övergång till konsekventa engelska filtervärden ska göras samordnat för redan synkade produkter.
+- **Boktyp:** Svensk, såsom `Grundregler` och `Äventyr`. Regelsystemens egna namn lämnas oförändrade.
+- **Språkversion:** Ett separat, manuellt produktmetafält `custom.rpg_language` (i Shopify: **Rollspel – språk**) visar en rad `Språk: Engelska` eller `Språk: Svenska` **endast när personalen faktiskt har fyllt i värdet**. Det befintliga `custom.sprak` är en valfri kompatibilitetsfallback. Om båda saknas visas ingen språkuppgift. Inga språk härleds från BGG/RPGGeek, spelmekaniker, titlar eller produktspecifikationer.
+- **Var:** Språkraden visas vid RPG-snabbfaktan, ovanför källhänvisningen. Brädspelens visning är oförändrad.
+- **Verifiering:** Kontrollera `Blades In The Dark` (Crime, Low Fantasy, Occult, Steampunk och engelska mekaniknamn), `Community Radio` (Comedy / Satire, Horror, Weird / Surreal och Description Based, Free-form), en RPG-bok med manuellt språkfält och en utan språkfält. Kontrollera även att Search & Discovery-värdena och brädspelskort fortfarande är oförändrade.
+- **Publicering:** Kör `npx shopify app deploy` från `dl-bgg-product-info` efter godkänt CI-byggtest, och kontrollera att appen heter **DL BGG Product Info**. Ingen synk av befintliga produkter krävs för enbart denna visningsändring.
+
 ## Vad version 1 visar
 
 Direkt på produktsidan visas upp till fyra badges:

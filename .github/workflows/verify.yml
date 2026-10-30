@@ -19,5 +19,7 @@ jobs:
           node-version: "24"
           cache: npm
       - run: npm ci
+      - name: Verify RPG terminology and language handling
+        run: node --test tests/rpg-display.test.mjs
       - name: Build Shopify theme app extension
         run: npx shopify app build
