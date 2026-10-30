@@ -23,6 +23,14 @@ Denna gren är **inte deployad**. Shopify-kopian `RPGGeek – Klon av livetema 3
 - Bekräfta att RPG badges visas och att spelare, speltid och komplexitet inte visas.
 - Kontrollera att ett brädspel fortfarande har samma badges och accordion som tidigare.
 
+## RPG-förfining (2026-10-30)
+
+- För D&D 5th Edition används den korta badge-texten `D&D 5e`, och `D&D 5E Game System` visas som `D&D 5E`. Originalnamnen behålls oförändrade i Shopify-metafält och visas fullständigt i den utfällbara RPG-informationen.
+- Om RPG-namnet är samma som produktens titel (t.ex. `Community Radio`) visas primärgenre i första faktakortet för att undvika onödig upprepning.
+- RPG-korten använder en responsiv grid som fördelar 1–4 kort över tillgänglig bredd. Detta påverkar **inte** brädspelens ordinarie fyrakortsgrid.
+- RPG-detaljerna har luftigare rader och bättre radavstånd, samt mobilanpassad enkolumnslayout.
+- Ingen automatisk ändring av lagrad RPGGeek-data eller BGG-fält sker i den här temauppdateringen.
+
 ## Vad version 1 visar
 
 Direkt på produktsidan visas upp till fyra badges:
