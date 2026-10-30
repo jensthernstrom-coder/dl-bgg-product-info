@@ -102,6 +102,10 @@ START: DL BGG PRODUCT INFO - DATA
   assign dl_rpg_game_shortened = false
   assign dl_rpg_system_shortened = false
   assign dl_rpg_use_genre_card = false
+  assign dl_show_rpg_system_badge = true
+  if dl_geek_source == 'rpg' and dl_rpg_game_display == dl_rpg_system_display
+    assign dl_show_rpg_system_badge = false
+  endif
 
   if dl_is_rpg
     if dl_rpg_game.size == 1 and dl_rpg_game_display == 'Dungeons & Dragons (5th Edition)'
@@ -220,7 +224,7 @@ END: DL BGG PRODUCT INFO - DATA
             </div>
           </div>
         {%- endif -%}
-        {%- if dl_rpg_system != blank -%}
+        {%- if dl_rpg_system != blank and dl_show_rpg_system_badge -%}
           <div class="dl-bgg-info__badge">
             <div class="dl-bgg-info__badge-text">
               <span class="dl-bgg-info__value">{{ dl_rpg_system_display | escape }}</span>
