@@ -8,6 +8,21 @@ Målet är medvetet enkelt:
 
 Ingen databas, ingen Supabase, ingen egen adminpanel och ingen ny synklogik.
 
+
+## RPGGeek-stöd (i separat draft-PR)
+
+Produktblocket växlar på `custom.bgg_source_type`: `rpgitem` / `rpgissue` visar RPG-specifik snabbfakta och en länk till `rpggeek.com`. Brädspelsvisningen och Theme Editor-inställningarna är oförändrade.
+
+RPG-vyn visar rollspel, regelsystem, tärningar och boktyp som badges när respektive data finns. Accordionen kan visa genre, mekaniker, spelvärld, kampanjserie, designers, förlag och utgivningsår. Den visar aldrig spelare/speltid/komplexitet från gamla BGG-fält på en RPG-produkt.
+
+Denna gren är **inte deployad**. Shopify-kopian `RPGGeek – Klon av livetema 30 okt` (theme ID `207641117020`) är opublicerad och innehåller redan detta app-block i den befintliga produktmallen. Shopify Theme App Extension måste få en ny appversion via CLI för att den uppdaterade RPG-vyn ska synas; en GitHub-commit ensam ändrar inte blocket i butikens temaförhandsgranskning.
+
+### Säkert förhandsgranskningstest
+- Använd produkt `Dungeons & Dragons: 2024 Player's Handbook` (RPGGeek `405473`), som har verifierade `custom.rpg_*`-metafält.
+- Efter att en utvecklingsversion av app-blocket gjorts tillgänglig i Theme Editor, välj den opublicerade temakopian och förhandsgranska produktmallen.
+- Bekräfta att RPG badges visas och att spelare, speltid och komplexitet inte visas.
+- Kontrollera att ett brädspel fortfarande har samma badges och accordion som tidigare.
+
 ## Vad version 1 visar
 
 Direkt på produktsidan visas upp till fyra badges:
