@@ -7,7 +7,7 @@ START: DL BGG PRODUCT INFO - DATA
 {%- liquid
   assign dl_geek_source = product.metafields.custom.bgg_source_type.value
   assign dl_is_rpg = false
-  if dl_geek_source == 'rpgitem' or dl_geek_source == 'rpgissue'
+  if dl_geek_source == 'rpgitem' or dl_geek_source == 'rpgissue' or dl_geek_source == 'rpg'
     assign dl_is_rpg = true
   endif
 
@@ -190,7 +190,7 @@ END: DL BGG PRODUCT INFO - DATA
 
   <div
     class="dl-bgg-info"
-    data-dl-block-version="rpggeek-v3-20261030"
+    data-dl-block-version="rpggeek-v4-system-20261030"
     data-dl-display-mode="{% if dl_is_rpg %}rpg{% else %}boardgame{% endif %}"
     data-dl-source-type="{{ dl_geek_source | default: 'saknas' | escape }}"
     data-theme-colors="{{ block.settings.use_theme_colors }}"
@@ -216,7 +216,7 @@ END: DL BGG PRODUCT INFO - DATA
           <div class="dl-bgg-info__badge">
             <div class="dl-bgg-info__badge-text">
               <span class="dl-bgg-info__value">{{ dl_rpg_game_display | escape }}</span>
-              <span class="dl-bgg-info__label">{% if dl_rpg_use_genre_card %}Genre{% else %}Rollspel{% endif %}</span>
+              <span class="dl-bgg-info__label">{% if dl_rpg_use_genre_card %}Genre{% elsif dl_geek_source == 'rpg' %}Rollspelssystem{% else %}Rollspel{% endif %}</span>
             </div>
           </div>
         {%- endif -%}
@@ -247,7 +247,7 @@ END: DL BGG PRODUCT INFO - DATA
       </div>
 
       {%- if block.settings.show_source -%}
-        <p class="dl-bgg-info__source">Speldata från RPGGeek</p>
+        <p class="dl-bgg-info__source">{% if dl_geek_source == 'rpg' %}Systeminformation från RPGGeek. Gäller rollspelet, inte en specifik produktutgåva.{% else %}Speldata från RPGGeek{% endif %}</p>
       {%- endif -%}
 
       {%- if dl_rpg_genre != blank or dl_rpg_mechanics != blank or dl_rpg_setting != blank or dl_rpg_series != blank or dl_rpg_designers != blank or dl_rpg_publishers != blank or dl_year != blank or dl_bgg_id != blank -%}
@@ -290,9 +290,9 @@ END: DL BGG PRODUCT INFO - DATA
             </dl>
             {%- if dl_bgg_id != blank -%}
               <a class="dl-bgg-info__bgg-link"
-                href="https://rpggeek.com/{% if dl_geek_source == 'rpgissue' %}rpgissue{% else %}rpgitem{% endif %}/{{ dl_bgg_id | escape }}"
+                href="https://rpggeek.com/{% if dl_geek_source == 'rpg' %}rpg{% elsif dl_geek_source == 'rpgissue' %}rpgissue{% else %}rpgitem{% endif %}/{{ dl_bgg_id | escape }}"
                 target="_blank" rel="noopener noreferrer">
-                <span>Se produkten på RPGGeek</span>
+                <span>{% if dl_geek_source == 'rpg' %}Se rollspelet på RPGGeek{% else %}Se produkten på RPGGeek{% endif %}</span>
                 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                   <path d="M14 5h5v5M10 14 19 5M19 13v6H5V5h6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
