@@ -48,9 +48,9 @@ Rollspelsinformationen har **svenska rubriker** men visar RPGGeeks etablerade en
 Direkt på produktsidan visas upp till fyra badges:
 
 - Spelare
-- BGG-betyg
-- Komplexitet
+- Rekommenderad ålder
 - Speltid
+- BGG-betyg
 
 Under dem visas:
 
@@ -59,7 +59,7 @@ Under dem visas:
 
 Accordionen visar endast kompletterande information, så huvudvärdena upprepas inte:
 
-1. Rekommenderad ålder
+1. Komplexitet (BGG weight, 1–5)
 2. Mekaniker
 3. Tema
 4. Designer
@@ -67,7 +67,7 @@ Accordionen visar endast kompletterande information, så huvudvärdena upprepas 
 6. Utgivningsår
 7. Länk till spelets sida på BoardGameGeek
 
-Om ett metafält saknar data försvinner motsvarande rad eller badge automatiskt.
+Om ett metafält saknar data försvinner motsvarande rad eller badge automatiskt. Åldern visas som `8+` (eller annat värde från `custom.min_age`) i snabbvyn; saknas ålder visas ingen ersättningsbadge för komplexitet. Komplexitet visas endast i accordionen om `custom.bgg_average_weight` finns. Rollspelsvyn påverkas inte.
 
 ## Metafält som används
 
