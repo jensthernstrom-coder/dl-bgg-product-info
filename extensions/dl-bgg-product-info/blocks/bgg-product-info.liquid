@@ -94,12 +94,12 @@ START: DL BGG PRODUCT INFO - DATA
   endif
 
   assign dl_has_badges = false
-  if dl_has_players or dl_rating != blank or dl_weight != blank or dl_has_time
+  if dl_has_players or dl_rating != blank or dl_min_age != blank or dl_has_time
     assign dl_has_badges = true
   endif
 
   assign dl_has_more = false
-  if dl_min_age != blank or dl_mechanics != blank or dl_theme != blank or dl_designers != blank or dl_publishers != blank or dl_year != blank or dl_bgg_id != blank
+  if dl_weight != blank or dl_mechanics != blank or dl_theme != blank or dl_designers != blank or dl_publishers != blank or dl_year != blank or dl_bgg_id != blank
     assign dl_has_more = true
   endif
 
@@ -218,7 +218,7 @@ END: DL BGG PRODUCT INFO - DATA
 
   <div
     class="dl-bgg-info"
-    data-dl-block-version="rpggeek-v5-original-language-20261030"
+    data-dl-block-version="bgg-age-quickfacts-rpg-v5-20261109"
     data-dl-display-mode="{% if dl_is_rpg %}rpg{% else %}boardgame{% endif %}"
     data-dl-source-type="{{ dl_geek_source | default: 'saknas' | escape }}"
     data-theme-colors="{{ block.settings.use_theme_colors }}"
@@ -373,26 +373,14 @@ END: DL BGG PRODUCT INFO - DATA
           </div>
         {%- endif -%}
 
-        {%- if dl_rating != blank -%}
+        {%- if dl_min_age != blank -%}
           <div class="dl-bgg-info__badge">
             <svg class="dl-bgg-info__icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path d="m12 3 2.78 5.63 6.22.9-4.5 4.39 1.06 6.2L12 17.2l-5.56 2.92 1.06-6.2L3 9.53l6.22-.9L12 3Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+              <path d="M5 21h14M6 21v-9h12v9M8 12V9h8v3M12 9V4M10 7l2-3 2 3M6 16h12" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
             <div class="dl-bgg-info__badge-text">
-              <span class="dl-bgg-info__value">{{ dl_rating_text }} / 10</span>
-<span class="dl-bgg-info__label">BGG-betyg</span>            </div>
-          </div>
-        {%- endif -%}
-
-        {%- if dl_weight != blank -%}
-          <div class="dl-bgg-info__badge">
-            <svg class="dl-bgg-info__icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.7"/>
-              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06-2.83 2.83-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21h-4v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06-2.83-2.83.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3v-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06L7.04 4.3l.06.06A1.65 1.65 0 0 0 8.92 4a1.65 1.65 0 0 0 1-1.51V2h4v.49a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06 2.83 2.83-.06.06A1.65 1.65 0 0 0 19.4 9c.12.61.65 1.05 1.27 1.05H21v4h-.33c-.62 0-1.15.44-1.27 1.05Z" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-            <div class="dl-bgg-info__badge-text">
-              <span class="dl-bgg-info__value">{{ dl_weight_text }} / 5</span>
-              <span class="dl-bgg-info__label">komplexitet</span>
+              <span class="dl-bgg-info__value">{{ dl_min_age }}+</span>
+              <span class="dl-bgg-info__label">ålder</span>
             </div>
           </div>
         {%- endif -%}
@@ -407,6 +395,17 @@ END: DL BGG PRODUCT INFO - DATA
               <span class="dl-bgg-info__value">{{ dl_time_text | strip }} min</span>
               <span class="dl-bgg-info__label">speltid</span>
             </div>
+          </div>
+        {%- endif -%}
+
+        {%- if dl_rating != blank -%}
+          <div class="dl-bgg-info__badge">
+            <svg class="dl-bgg-info__icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="m12 3 2.78 5.63 6.22.9-4.5 4.39 1.06 6.2L12 17.2l-5.56 2.92 1.06-6.2L3 9.53l6.22-.9L12 3Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+            </svg>
+            <div class="dl-bgg-info__badge-text">
+              <span class="dl-bgg-info__value">{{ dl_rating_text }} / 10</span>
+<span class="dl-bgg-info__label">BGG-betyg</span>            </div>
           </div>
         {%- endif -%}
 
@@ -429,10 +428,10 @@ END: DL BGG PRODUCT INFO - DATA
         <div class="dl-bgg-info__expanded">
           <dl class="dl-bgg-info__rows">
 
-            {%- if dl_min_age != blank -%}
+            {%- if dl_weight != blank -%}
               <div class="dl-bgg-info__row">
-                <dt class="dl-bgg-info__term">Rekommenderad ålder</dt>
-                <dd class="dl-bgg-info__description">{{ dl_min_age }}+</dd>
+                <dt class="dl-bgg-info__term">Komplexitet</dt>
+                <dd class="dl-bgg-info__description">{{ dl_weight_text }} / 5</dd>
               </div>
             {%- endif -%}
 
