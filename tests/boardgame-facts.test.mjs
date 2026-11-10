@@ -41,3 +41,14 @@ test("RPG-specific display stays separate from boardgame badges", () => {
   assert.match(liquid, /aria-label="Rollspelsfakta från RPGGeek"/);
   assert.match(liquid, /data-dl-display-mode/);
 });
+
+test("expanded facts show synced BGG Tools complexity label in parentheses", () => {
+  assert.ok(liquid.includes("assign dl_complexity_label = product.metafields.custom.bgg_complexity.value"));
+  assert.ok(boardgameMore.includes("{{ dl_weight_text }} / 5{% if dl_complexity_label != blank %} ({{ dl_complexity_label | escape }}){% endif %}"));
+});
+
+test("theme list is joined as human-readable text rather than raw JSON", () => {
+  assert.ok(boardgameMore.includes("{{ dl_theme | join: ' · ' | escape }}"));
+  assert.ok(!boardgameMore.includes("{{ dl_theme | escape }}"));
+  assert.ok(boardgameMore.includes("{{ dl_mechanics | join: ' · ' | escape }}"));
+});
