@@ -67,7 +67,7 @@ Accordionen visar endast kompletterande information, så huvudvärdena upprepas 
 6. Utgivningsår
 7. Länk till spelets sida på BoardGameGeek
 
-Om ett metafält saknar data försvinner motsvarande rad eller badge automatiskt. Åldern visas som `8+` (eller annat värde från `custom.min_age`) i snabbvyn; saknas ålder visas ingen ersättningsbadge för komplexitet. Komplexitet visas endast i accordionen om `custom.bgg_average_weight` finns. Rollspelsvyn påverkas inte.
+Om ett metafält saknar data försvinner motsvarande rad eller badge automatiskt. Åldern visas som `8+` (eller annat värde från `custom.min_age`) i snabbvyn; saknas ålder visas ingen ersättningsbadge för komplexitet. Komplexitet visas endast i accordionen om `custom.bgg_average_weight` finns. Om Shopify har `custom.bgg_complexity` visas även BGG Tools befintliga klassificering inom parentes, exempelvis `3,9 / 5 (Avancerat)`. Saknas den klassificeringen visas bara siffervärdet, utan gissad etikett. `custom.theme` är en listmetafältstyp och formateras som läsbara namn separerade med ` · ` i stället för rå JSON. Rollspelsvyn påverkas inte.
 
 ## Metafält som används
 
@@ -77,6 +77,7 @@ Om ett metafält saknar data försvinner motsvarande rad eller badge automatiskt
 | Max spelare | `custom.max_players` |
 | BGG-betyg | `custom.bgg_average_rating` |
 | BGG weight | `custom.bgg_average_weight` |
+| Komplexitetsetikett (från BGG Tools) | `custom.bgg_complexity` |
 | Min speltid | `custom.play_time_min_minutes` |
 | Max speltid | `custom.play_time_max_minutes` |
 | Rek. ålder | `custom.min_age` |

@@ -53,6 +53,8 @@ START: DL BGG PRODUCT INFO - DATA
   assign dl_max_players = product.metafields.custom.max_players.value
   assign dl_rating = product.metafields.custom.bgg_average_rating.value
   assign dl_weight = product.metafields.custom.bgg_average_weight.value
+  # Use the same human-readable complexity class as BGG Tools / Spelguiden.
+  assign dl_complexity_label = product.metafields.custom.bgg_complexity.value
   assign dl_time_min = product.metafields.custom.play_time_min_minutes.value
   assign dl_time_max = product.metafields.custom.play_time_max_minutes.value
 
@@ -218,7 +220,7 @@ END: DL BGG PRODUCT INFO - DATA
 
   <div
     class="dl-bgg-info"
-    data-dl-block-version="bgg-age-quickfacts-rpg-v5-20261109"
+    data-dl-block-version="bgg-readable-details-rpg-v5-20261110"
     data-dl-display-mode="{% if dl_is_rpg %}rpg{% else %}boardgame{% endif %}"
     data-dl-source-type="{{ dl_geek_source | default: 'saknas' | escape }}"
     data-theme-colors="{{ block.settings.use_theme_colors }}"
@@ -431,7 +433,7 @@ END: DL BGG PRODUCT INFO - DATA
             {%- if dl_weight != blank -%}
               <div class="dl-bgg-info__row">
                 <dt class="dl-bgg-info__term">Komplexitet</dt>
-                <dd class="dl-bgg-info__description">{{ dl_weight_text }} / 5</dd>
+                <dd class="dl-bgg-info__description">{{ dl_weight_text }} / 5{% if dl_complexity_label != blank %} ({{ dl_complexity_label | escape }}){% endif %}</dd>
               </div>
             {%- endif -%}
 
@@ -445,7 +447,7 @@ END: DL BGG PRODUCT INFO - DATA
             {%- if dl_theme != blank -%}
               <div class="dl-bgg-info__row">
                 <dt class="dl-bgg-info__term">Tema</dt>
-                <dd class="dl-bgg-info__description">{{ dl_theme | escape }}</dd>
+                <dd class="dl-bgg-info__description">{{ dl_theme | join: ' · ' | escape }}</dd>
               </div>
             {%- endif -%}
 
